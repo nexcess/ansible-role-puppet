@@ -26,17 +26,6 @@
     name: "{{ puppet_package_name }}"
     state: "installed"
 
-- name: Check if puppet csr attributes json file is already configured.
-  stat: path={{ puppet_csr_attr_json }}
-  register: puppet_csrfile_json_result
-
-#- name: Download csr_attributes.json.
-#  get_url:
-#    url: "{{ nocworx_uuid_url }}"
-#    dest: "{{ puppet_csr_attr_json }}"
-#    mode: 0400
-#  when: not puppet_csrfile_json_result.stat.exists
-
 - name: Check if puppet csr attributes yaml file is already configured.
   stat: path={{ puppet_csr_attr_yaml }}
   register: puppet_csrfile_yaml_result
