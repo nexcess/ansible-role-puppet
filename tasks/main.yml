@@ -1,9 +1,9 @@
 ---
-- name: Check if PUPPET repo is already configured.
+- name: Check if puppet repo is already configured.
   stat: path={{ puppet_repofile_path }}
   register: puppet_repofile_result
 
-- name: Install PUPPET repo.
+- name: Install puppet repo.
   yum:
     name: "{{ puppet_repo_url }}"
     state: present
@@ -13,7 +13,7 @@
   delay: 10
   when: not puppet_repofile_result.stat.exists
 
-- name: Import PUPPET GPG keys.
+- name: Import puppet GPG keys.
   rpm_key:
     key: "{{ item }}"
     state: present

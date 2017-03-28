@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: "Paul Oehler"
-  description: "PUPPET repository for RHEL/CentOS."
+  description: "Puppet ansible role for RHEL/CentOS."
   company: "Nexcess.net LLC"
   license: "MIT"
   min_ansible_version: "2.1"

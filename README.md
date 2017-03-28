@@ -1,4 +1,4 @@
-# Ansible Role: PUPPET Repository
+# Ansible Role: puppet Repository
 
 Installs the [Puppet repository](http://mirror.nexcess.net/puppetlabs/yum/) for RHEL/CentOS.
 
@@ -18,7 +18,7 @@ None.
 
 	- hosts: servers
 	  roles:
-		- nexcess.repo-puppet
+		- nexcess.puppet
 
 ## License
 
