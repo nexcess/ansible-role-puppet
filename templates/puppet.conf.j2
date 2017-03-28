@@ -5,7 +5,7 @@
 # - https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
 # - https://docs.puppetlabs.com/puppet/latest/reference/config_file_main.html
 # - https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
-certname = {{ puppet_certname.stdout }}
+certname = {{ puppet_uuid }}
 runinterval = {{ puppet_run_interval }}
 use_srv_records = {{ puppet_use_srv_records }}
 srv_domain = {{ puppet_srv_domain }}
