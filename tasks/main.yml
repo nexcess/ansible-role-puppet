@@ -1,0 +1,77 @@
+---
+- name: Check if PUPPET repo is already configured.
+  stat: path={{ puppet_repofile_path }}
+  register: puppet_repofile_result
+
+- name: Install PUPPET repo.
+  yum:
+    name: "{{ puppet_repo_url }}"
+    state: present
+  register: result
+  until: '"failed" not in result'
+  retries: 5
+  delay: 10
+  when: not puppet_repofile_result.stat.exists
+
+- name: Import PUPPET GPG keys.
+  rpm_key:
+    key: "{{ item }}"
+    state: present
+  with_items: "{{ puppet_repo_gpg_key_urls }}"
+  when: not puppet_repofile_result.stat.exists
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Ensure puppet is installed.
+  yum:
+    name: "{{ puppet_package_name }}"
+    state: "installed"
+
+- name: Check if puppet csr attributes json file is already configured.
+  stat: path={{ puppet_csr_attr_json }}
+  register: puppet_csrfile_json_result
+
+- name: Download csr_attributes.json.
+  get_url:
+    url: "{{ nocworx_uuid_url }}"
+    dest: "{{ puppet_csr_attr_json }}"
+    mode: 0400
+  when: not puppet_csrfile_json_result.stat.exists
+
+- name: Check if puppet csr attributes yaml file is already configured.
+  stat: path={{ puppet_csr_attr_yaml }}
+  register: puppet_csrfile_yaml_result
+
+- name: Generate csr_attributes.yaml.
+  shell: >
+    /opt/puppetlabs/puppet/bin/ruby
+    -rjson
+    -ryaml
+    -e
+    'j = JSON.load(File.read("/etc/puppetlabs/puppet/csr_attributes.json")); csr = {}; csr["custom_attributes"] = {}; csr["extension_requests"] = {}; csr["custom_attributes"]["1.2.840.113549.1.9.7"] = j["checksum"]; csr["extension_requests"]["pp_uuid"] = j["uuid"]; csr["extension_requests"]["pp_project"] = j["company"]; csr["extension_requests"]["pp_instance_id"] = j["id"]; puts csr.to_yaml'
+    > /etc/puppetlabs/puppet/csr_attributes.yaml
+  when: not puppet_csrfile_yaml_result.stat.exists
+
+- name: Generate the puppet certname.
+  shell: >
+    /opt/puppetlabs/puppet/bin/ruby
+    -rjson
+    -e
+    'j = JSON.load(File.read("{{ puppet_csr_attr_json }}")); puts "#{j["uuid"].to_s}"'
+  register: puppet_certname
+
+- name: Setup puppet.conf
+  template:
+    src="puppet.conf.j2"
+    dest="{{ puppet_conf_path }}"
+    owner="root"
+    group="root"
+    mode="0440"
+
+- name: Run puppet.
+  command: >
+    /opt/puppetlabs/bin/puppet
+    agent
+    -t
+  register: puppet_run_result
+  retries: 1
+  until: puppet_run_result.rc == 0

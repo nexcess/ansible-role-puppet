@@ -1,0 +1,19 @@
+---
+puppet_repo_url: "http://mirror.nexcess.net/puppetlabs/yum/puppetlabs-release-pc1-el-{{ ansible_distribution_major_version }}.noarch.rpm"
+puppet_repo_gpg_key_urls:
+  - "/etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs-PC1"
+  - "/etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-PC1"
+puppet_repofile_path: "/etc/yum.repos.d/puppetlabs-pc1.repo"
+
+puppet_package_name: "puppet-agent"
+
+puppet_csr_attr_json: "/etc/puppetlabs/puppet/csr_attributes.json"
+puppet_csr_attr_yaml: "/etc/puppetlabs/puppet/csr_attributes.yaml"
+
+nocworx_uuid_url: "https://nocworx.nexcess.net/allocation/get-uuid.json"
+
+puppet_conf_path: "/etc/puppetlabs/puppet/puppet.conf"
+
+puppet_run_interval: "1m"
+puppet_use_srv_records: "true"
+puppet_srv_domain: "nexcess.net"
