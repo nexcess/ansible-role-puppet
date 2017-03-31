@@ -1,4 +1,5 @@
 ---
+
 galaxy_info:
   author: "Paul Oehler"
   description: "Puppet ansible role for RHEL/CentOS."
