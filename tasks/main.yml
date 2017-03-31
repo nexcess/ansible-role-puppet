@@ -52,3 +52,8 @@
   register: puppet_run_result
   retries: 1
   until: puppet_run_result.rc == 2 or puppet_run_result.rc == 0
+  ignore_errors: true
+
+- fail:
+    msg="Puppet Agent Run Failed"
+  when: puppet_run_result.rc != 2 and puppet_run_result.rc != 0
