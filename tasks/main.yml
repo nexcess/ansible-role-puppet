@@ -1,34 +1,32 @@
 ---
-- name: Check if puppet repo is already configured.
-  stat: path={{ puppet_repofile_path }}
+
+- name: Check if Puppet Repo Is Already Configured
+  stat:
+    path="{{ puppet_repofile_path }}"
   register: puppet_repofile_result
 
-- name: Install puppet repo.
+- name: Install Puppet Repo
   yum:
-    name: "{{ puppet_repo_url }}"
-    state: present
+    name="{{ puppet_repo_url }}"
+    state="present"
   register: result
   until: '"failed" not in result'
   retries: 5
   delay: 10
   when: not puppet_repofile_result.stat.exists
 
-- name: Import puppet GPG keys.
+- name: Import Puppet GPG Keys
   rpm_key:
-    key: "{{ item }}"
-    state: present
+    key="{{ item }}"
+    state="present"
   with_items: "{{ puppet_repo_gpg_key_urls }}"
   when: not puppet_repofile_result.stat.exists
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: Ensure puppet is installed.
+- name: Ensure Puppet is Installed
   yum:
-    name: "{{ puppet_package_name }}"
-    state: "installed"
-
-- name: Check if puppet csr attributes yaml file is already configured.
-  stat: path={{ puppet_csr_attr_yaml }}
-  register: puppet_csrfile_yaml_result
+    name="{{ puppet_package_name }}"
+    state="installed"
 
 - name: Setup csr_attributes.yaml
   template:
@@ -36,7 +34,7 @@
     dest="{{ puppet_csr_attr_yaml }}"
     owner="root"
     group="root"
-    mode="0400"
+    mode=0400
 
 - name: Setup puppet.conf
   template:
@@ -44,13 +42,13 @@
     dest="{{ puppet_conf_path }}"
     owner="root"
     group="root"
-    mode="0440"
+    mode=0440
 
-- name: Run puppet.
+- name: Run Puppet
   command: >
     /opt/puppetlabs/bin/puppet
     agent
     -t
   register: puppet_run_result
   retries: 1
-  until: puppet_run_result.rc == 0
+  until: puppet_run_result.rc == 2 or puppet_run_result.rc == 0
