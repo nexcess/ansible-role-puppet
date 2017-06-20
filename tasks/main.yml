@@ -65,5 +65,5 @@
   command: >
     /opt/puppetlabs/bin/puppet
     agent
-    -D
+    -t &
   when: puppet_agent_fire_and_forget
