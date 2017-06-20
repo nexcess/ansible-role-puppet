@@ -44,7 +44,7 @@
     group="root"
     mode=0440
 
-- name: Run Puppet
+- name: Run Puppet (Blocking)
   command: >
     /opt/puppetlabs/bin/puppet
     agent
@@ -53,7 +53,17 @@
   retries: 1
   until: puppet_run_result.rc == 2 or puppet_run_result.rc == 0
   ignore_errors: true
+  when: not puppet_agent_fire_and_forget
 
 - fail:
     msg="Puppet Agent Run Failed"
-  when: puppet_run_result.rc != 2 and puppet_run_result.rc != 0
+  when:
+    - not puppet_agent_fire_and_forget
+    - puppet_run_result.rc != 2 and puppet_run_result.rc != 0
+
+- name: Run Puppet (Non-Blocking)
+  command: >
+    /opt/puppetlabs/bin/puppet
+    agent
+    -D
+  when: puppet_agent_fire_and_forget
