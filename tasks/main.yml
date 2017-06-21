@@ -46,7 +46,7 @@
 
 - name: Run Puppet (Blocking)
   command: >
-    /opt/puppetlabs/bin/puppet --logdest /root/puppet.log agent -t
+    /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
   register: puppet_run_result
   retries: 1
   until: puppet_run_result.rc == 2 or puppet_run_result.rc == 0
@@ -61,5 +61,5 @@
 
 - name: Run Puppet (Non-Blocking)
   command: >
-    /opt/puppetlabs/bin/puppet --logdest /root/puppet.log agent -t &
+    /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log &
   when: puppet_agent_fire_and_forget
