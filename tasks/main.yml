@@ -44,6 +44,11 @@
     group="root"
     mode=0440
 
+- name: Stat run lock file
+  stat:
+    path="{{puppet_agent_catalog_run_lock}}"
+  register: puppet_lock_stat
+
 - name: Run Puppet (Blocking)
   command: >
     /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
@@ -51,7 +56,9 @@
   retries: 1
   until: puppet_run_result.rc == 2 or puppet_run_result.rc == 0
   ignore_errors: true
-  when: not puppet_agent_fire_and_forget
+  when: 
+    - not puppet_agent_fire_and_forget
+    - puppet_lock_stat.stat.exists == false
 
 - fail:
     msg="Puppet Agent Run Failed"
@@ -62,4 +69,6 @@
 - name: Run Puppet (Non-Blocking)
   command: >
     /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log &
-  when: puppet_agent_fire_and_forget
+  when: 
+    - puppet_agent_fire_and_forget
+    - puppet_lock_stat.stat.exists == false
