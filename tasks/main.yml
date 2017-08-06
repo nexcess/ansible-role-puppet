@@ -64,7 +64,9 @@
     msg="Puppet Agent Run Failed"
   when:
     - not puppet_agent_fire_and_forget
-    - puppet_run_result.rc != 2 and puppet_run_result.rc != 0
+    - puppet_run_result.rc != 0
+    - puppet_run_result.rc != 2
+    - puppet_run_result.rc != 6
 
 - name: Run Puppet (Non-Blocking)
   command: >
