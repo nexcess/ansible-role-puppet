@@ -68,9 +68,19 @@
     - puppet_run_result.rc != 2
     - puppet_run_result.rc != 6
 
+- name: Copy Puppet Running Script (Non-Blocking)
+  copy: 
+    src="launch-puppet.sh"
+    dest="/root/launch-puppet.sh"
+    mode="0700"
+  when: 
+    - puppet_agent_fire_and_forget
+    - puppet_lock_stat.stat.exists == false
+
 - name: Run Puppet (Non-Blocking)
-  command: >
-    /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log &
+  command: /root/launch-puppet.sh
+  async: 2592000
+  poll: 0
   when: 
     - puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
