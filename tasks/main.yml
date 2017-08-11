@@ -49,14 +49,14 @@
     path="{{puppet_agent_catalog_run_lock}}"
   register: puppet_lock_stat
 
-- name: Run Puppet (Blocking)
+- name: Run Puppet (Blocking <-- This Can Take a LONG Time)
   command: >
     /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
   register: puppet_run_result
   retries: 1
   until: puppet_run_result.rc == 2 or puppet_run_result.rc == 0
   ignore_errors: true
-  when: 
+  when:
     - not puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
 
@@ -69,11 +69,11 @@
     - puppet_run_result.rc != 6
 
 - name: Copy Puppet Running Script (Non-Blocking)
-  copy: 
+  copy:
     src="launch-puppet.sh"
     dest="/root/launch-puppet.sh"
     mode="0700"
-  when: 
+  when:
     - puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
 
@@ -81,6 +81,6 @@
   command: /root/launch-puppet.sh
   async: 2592000
   poll: 0
-  when: 
+  when:
     - puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
