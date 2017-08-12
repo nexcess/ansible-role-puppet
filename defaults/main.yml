@@ -17,4 +17,4 @@ puppet_uuid: ""
 puppet_instance_id: ""
 puppet_project: ""
 puppet_hash: ""
-puppet_agent_fire_and_forget: false
+puppet_agent_fire_and_forget: true
