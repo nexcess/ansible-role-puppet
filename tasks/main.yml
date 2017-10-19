@@ -27,6 +27,10 @@
   yum:
     name="{{ puppet_package_name }}"
     state="installed"
+  register: yum_result
+  until: '"failed" not in yum_result'
+  retries: 5
+  delay: 10
 
 - name: Setup csr_attributes.yaml
   template:
