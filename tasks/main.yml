@@ -60,6 +60,7 @@
   retries: 1
   until: puppet_run_result.rc == 2 or puppet_run_result.rc == 0
   ignore_errors: true
+  failed_when: false ## temporary fix until upstream Interworx bug is in a release
   when:
     - not puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
