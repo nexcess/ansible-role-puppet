@@ -57,20 +57,12 @@
   command: >
     /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
   register: puppet_run_result
-  retries: 3
-  until: puppet_run_result.rc == 0
+  retries: 5
+  until: puppet_run_result.rc == 0 or puppet_run_result.rc == 4
   ignore_errors: true
   when:
     - not puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
-
-##- fail:
-##    msg="Puppet Agent Run Failed"
-##  when:
-##    - not puppet_agent_fire_and_forget
-##    - puppet_run_result.rc != 0
-##    - puppet_run_result.rc != 2
-##    - puppet_run_result.rc != 6
 
 - name: Copy Puppet Running Script (Non-Blocking)
   copy:
