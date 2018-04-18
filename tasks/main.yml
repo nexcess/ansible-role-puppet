@@ -59,7 +59,6 @@
   register: puppet_run_result
   retries: 5
   until: puppet_run_result.rc == 0 or puppet_run_result.rc == 4
-  ignore_errors: true
   when:
     - not puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
