@@ -55,7 +55,7 @@
 
 - name: Run Puppet (Blocking <-- This Can Take a LONG Time And May Fail Once)
   command: >
-    /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
+    /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log --environment {{ puppet_environment | default('production') }}
   register: puppet_run_result
   retries: 5
   until: puppet_run_result.rc == 0 or puppet_run_result.rc == 4
@@ -73,7 +73,7 @@
     - puppet_lock_stat.stat.exists == false
 
 - name: Run Puppet (Non-Blocking)
-  command: /root/launch-puppet.sh
+  command: /root/launch-puppet.sh {{ puppet_environment | default('production') }}
   async: 2592000
   poll: 0
   when:
