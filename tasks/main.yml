@@ -72,8 +72,12 @@
 - name: Dump Puppet Log on Failure
   debug:
     var: puppet_log.stdout_lines
-  when: puppet_run_result.rc != 0 && puppet_run_result.rc != 4
-  failed_when: puppet_run_result.rc != 0 && puppet_run_result.rc != 4
+  when:
+    - puppet_run_result.rc != 0
+    - puppet_run_result.rc != 4
+  failed_when:
+    - puppet_run_result.rc != 0
+    - puppet_run_result.rc != 4
 
 - name: Copy Puppet Running Script (Non-Blocking)
   copy:
