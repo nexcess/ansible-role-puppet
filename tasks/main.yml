@@ -59,9 +59,21 @@
   register: puppet_run_result
   retries: 5
   until: puppet_run_result.rc == 0 or puppet_run_result.rc == 4
+  failed_when: false
   when:
     - not puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
+
+- name: Suck in The Puppet Log
+  command: >
+    cat /root/puppet.log
+  register: puppet_log
+
+- name: Dump Puppet Log on Failure
+  debug:
+    var: puppet_log.stdout_lines
+  when: puppet_run_result.rc != 0 && puppet_run_result.rc != 4
+  failed_when: puppet_run_result.rc != 0 && puppet_run_result.rc != 4
 
 - name: Copy Puppet Running Script (Non-Blocking)
   copy:
