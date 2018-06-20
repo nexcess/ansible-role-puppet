@@ -54,7 +54,8 @@
   register: puppet_lock_stat
 
 - name: Run Puppet (Blocking <-- This Can Take a LONG Time And May Fail Once)
-  command: >
+  shell: >
+    pkill -f /bin/puppet;
     /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
   register: puppet_run_result
   retries: 5
