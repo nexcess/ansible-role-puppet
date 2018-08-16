@@ -28,7 +28,7 @@
     name: "{{ puppet_package_name }}"
     state: "installed"
   register: yum_result
-  until: '"failed" not in yum_result'
+  until: 'yum_result.rc == 0'
   retries: 5
   delay: 10
 
