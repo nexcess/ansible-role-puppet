@@ -65,10 +65,16 @@
     - not puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
 
+- name: See if puppet.log Exists
+  stat:
+    path: "/root/puppet.log"
+  register: puppet_log_stat
+
 - name: Suck in The Puppet Log
   command: >
     cat /root/puppet.log
   register: puppet_log
+  when: puppet_log_stat.stat.exists
 
 - name: Dump Puppet Log on Failure
   debug:
