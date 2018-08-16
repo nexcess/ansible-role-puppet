@@ -2,31 +2,31 @@
 
 - name: Check if Puppet Repo Is Already Configured
   stat:
-    path="{{ puppet_repofile_path }}"
+    path: "{{ puppet_repofile_path }}"
   register: puppet_repofile_result
 
 - name: Install Puppet Repo
   yum:
-    name="{{ puppet_repo_url }}"
-    state="present"
+    name: "{{ puppet_repo_url }}"
+    state: "present"
   register: result
-  until: '"failed" not in result'
+  until: 'result.rc == 0'
   retries: 5
   delay: 10
   when: not puppet_repofile_result.stat.exists
 
 - name: Import Puppet GPG Keys
   rpm_key:
-    key="{{ item }}"
-    state="present"
+    key: "{{ item }}"
+    state: "present"
   with_items: "{{ puppet_repo_gpg_key_urls }}"
   when: not puppet_repofile_result.stat.exists
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Ensure Puppet is Installed
   yum:
-    name="{{ puppet_package_name }}"
-    state="installed"
+    name: "{{ puppet_package_name }}"
+    state: "installed"
   register: yum_result
   until: '"failed" not in yum_result'
   retries: 5
@@ -34,23 +34,23 @@
 
 - name: Setup csr_attributes.yaml
   template:
-    src="csr_attributes.yaml.j2"
-    dest="{{ puppet_csr_attr_yaml }}"
-    owner="root"
-    group="root"
-    mode=0400
+    src: "csr_attributes.yaml.j2"
+    dest: "{{ puppet_csr_attr_yaml }}"
+    owner: "root"
+    group: "root"
+    mode: 0400
 
 - name: Setup puppet.conf
   template:
-    src="puppet.conf.j2"
-    dest="{{ puppet_conf_path }}"
-    owner="root"
-    group="root"
-    mode=0440
+    src: "puppet.conf.j2"
+    dest: "{{ puppet_conf_path }}"
+    owner: "root"
+    group: "root"
+    mode: 0440
 
 - name: Stat run lock file
   stat:
-    path="{{puppet_agent_catalog_run_lock}}"
+    path: "{{puppet_agent_catalog_run_lock}}"
   register: puppet_lock_stat
 
 - name: Run Puppet (Blocking <-- This Can Take a LONG Time And May Fail Once)
@@ -82,9 +82,9 @@
 
 - name: Copy Puppet Running Script (Non-Blocking)
   copy:
-    src="launch-puppet.sh"
-    dest="/root/launch-puppet.sh"
-    mode="0700"
+    src: "launch-puppet.sh"
+    dest: "/root/launch-puppet.sh"
+    mode: "0700"
   when:
     - puppet_agent_fire_and_forget
     - puppet_lock_stat.stat.exists == false
