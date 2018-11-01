@@ -58,7 +58,7 @@
     pkill -9 puppet;
     /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
   register: puppet_run_result
-  retries: 5
+  retries: 8
   until: puppet_run_result.rc == 0 or puppet_run_result.rc == 4
   failed_when: false
   when:
