@@ -11,7 +11,7 @@ puppet_conf_path: "/etc/puppetlabs/puppet/puppet.conf"
 puppet_agent_catalog_run_lock: "/opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock"
 
 puppet_run_interval: "1m"
-puppet_server: "puppet.us-midwest-1.nexcess.net"
+puppet_server: "yipyip.us-midwest-1.nexcess.net"
 puppet_ca_server: "yy-ca01.us-midwest-1.nexcess.net"
 puppet_uuid: ""
 puppet_instance_id: ""
