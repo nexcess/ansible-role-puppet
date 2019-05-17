@@ -66,7 +66,7 @@
     /opt/puppetlabs/bin/puppet agent -t --logdest /root/puppet.log
   register: puppet_run_result
   retries: 8
-  until: puppet_run_result.rc == 0 or puppet_run_result.rc == 4
+  until: puppet_run_result.rc == 0 or puppet_run_result.rc == 4 or puppet_run_result.rc == 2
   failed_when: false
   when:
     - not puppet_agent_fire_and_forget
