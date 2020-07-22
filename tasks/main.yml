@@ -114,3 +114,4 @@
 # since these restarts are client facing/impacting
 - name: Restart services puppet does not in production
   command: /usr/bin/systemctl try-restart mariadb.service nginx.service httpd.service redis-multi*.service
+  ignore_errors: True
