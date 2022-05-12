@@ -18,7 +18,7 @@
 - name: Ensure Puppet Repo baseurl points to an internal mirror
   ini_file:
     path: "{{ puppet_repofile_path }}"
-    section: puppetlabs-pc1
+    section: puppet6
     option: baseurl
     value: "{{ puppet_repo_baseurl }}"
 
