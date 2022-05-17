@@ -1,11 +1,11 @@
 ---
 
-puppet_repo_url: "http://mirror.us-midwest-1.nexcess.net/puppetlabs/yum/puppetlabs-release-pc1-el-{{ ansible_distribution_major_version }}.noarch.rpm"
-puppet_repo_baseurl: 'https://imirror.us-midwest-1.nexcess.net/puppetlabs/yum/el/$releasever/PC1/$basearch/'
+puppet_repo_url: "https://mirror.us-midwest-1.nexcess.net/puppetlabs/yum/puppet6/puppet6-release-el-{{ ansible_distribution_major_version }}.noarch.rpm"
+puppet_repo_baseurl: 'https://imirror.us-midwest-1.nexcess.net/puppetlabs/yum/puppet6/el/$releasever/$basearch'
 puppet_repo_gpg_key_urls:
-  - "/etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs-PC1"
-  - "/etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-PC1"
-puppet_repofile_path: "/etc/yum.repos.d/puppetlabs-pc1.repo"
+  - "/etc/pki/rpm-gpg/RPM-GPG-KEY-puppet6-release"
+  - "/etc/pki/rpm-gpg/RPM-GPG-KEY-2025-04-06-puppet6-release"
+puppet_repofile_path: "/etc/yum.repos.d/puppet6.repo"
 puppet_package_name: "puppet-agent"
 puppet_csr_attr_yaml: "/etc/puppetlabs/puppet/csr_attributes.yaml"
 puppet_conf_path: "/etc/puppetlabs/puppet/puppet.conf"
