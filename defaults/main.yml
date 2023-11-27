@@ -14,6 +14,7 @@ puppet_agent_catalog_run_lock: "/opt/puppetlabs/puppet/cache/state/agent_catalog
 puppet_run_interval: "1m"
 puppet_server: "puppet.us-midwest-1.nexcess.net"
 puppet_ca_server: "yy-ca.us-midwest-2.nexcess.net"
+puppet_environment: "production"
 puppet_uuid: ""
 puppet_instance_id: ""
 puppet_project: ""
