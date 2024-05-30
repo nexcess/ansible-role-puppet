@@ -5,6 +5,14 @@
     path: "{{ puppet_repofile_path }}"
   register: puppet_repofile_result
 
+- name: Import Puppet GPG Keys
+  rpm_key:
+    key: "{{ item }}"
+    state: "present"
+  with_items: "{{ puppet_repo_gpg_key_urls }}"
+  when: not puppet_repofile_result.stat.exists
+  ignore_errors: "{{ ansible_check_mode }}"
+
 - name: Install Puppet Repo
   yum:
     name: "{{ puppet_repo_url }}"
@@ -21,14 +29,6 @@
     section: puppet6
     option: baseurl
     value: "{{ puppet_repo_baseurl }}"
-
-- name: Import Puppet GPG Keys
-  rpm_key:
-    key: "{{ item }}"
-    state: "present"
-  with_items: "{{ puppet_repo_gpg_key_urls }}"
-  when: not puppet_repofile_result.stat.exists
-  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Ensure Puppet is Installed
   yum:
