@@ -10,7 +10,7 @@
     name: "{{ puppet_repo_url }}"
     state: "present"
   register: result
-  until: 'result.rc == 0'
+  until: 'result.rc | default(1) == 0'
   retries: 5
   delay: 10
   when: not puppet_repofile_result.stat.exists
